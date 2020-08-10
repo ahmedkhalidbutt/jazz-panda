@@ -1,0 +1,51 @@
+{
+    "manifest_version": 2,
+    "name": "Jazz Panda",
+    "description": "HR Document Processing",
+    "version": "0.1.0",
+    "icons": {
+      "16": "icon/16.png",
+      "48": "icon/48.png",
+      "128": "icon/128.png"
+    },
+    "browser_action": {},
+    "background": {
+      "scripts": [
+        "js/background.js"
+      ],
+      "persistent": false
+    },
+    "options_ui": {
+      "page": "options.html",
+      "chrome_style": true
+    },
+    "commands": {
+      "_execute_browser_action": {
+        "suggested_key": {
+          "windows": "Alt+Shift+Y",
+          "mac": "Command+Shift+Y",
+          "linux": "Alt+Shift+J"
+        }
+      }
+    },
+    "content_scripts": [
+      {
+        "matches": [
+          "<all_urls>"
+        ],
+        "js": [
+          "js/content-script.js"
+        ],
+        "css": [
+          "css/style.css"
+        ],
+        "run_at": "document_end"
+      }
+    ],
+    "permissions": [
+      "storage",
+      "activeTab",
+      "<all_urls>",
+      "tabs"
+    ]
+  }
