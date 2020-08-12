@@ -34,9 +34,12 @@
           "<all_urls>"
         ],
         "js": [
+          "js/jquery.min.js",
+          "js/selector.js",
           "js/content-script.js"
         ],
         "css": [
+          "css/selectr.min.css",
           "css/style.css"
         ],
         "run_at": "document_end"
