@@ -7,10 +7,10 @@
  */
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-	let { pandaDocApi, type } = request;
+	let { baseUrl, type } = request;
 	switch (type) {
 		case 'fetchTemplates': {
-			fetchTemplates(pandaDocApi).then((response) =>
+			fetchTemplates(baseUrl).then((response) =>
 				sendResponse({
 					templates: response.results
 				})
@@ -26,15 +26,12 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
  * fetches the templates from the pandadoc api
  * @param {string} apiKey 
  */
-async function fetchTemplates(apiKey) {
-	var myHeaders = new Headers();
-	myHeaders.append('Authorization', `API-Key ${apiKey}`);
+async function fetchTemplates(baseUrl) {
 	var requestOptions = {
 		method: 'GET',
-		headers: myHeaders,
 		redirect: 'follow'
 	};
-	let response = await fetch('https://api.pandadoc.com/public/v1/templates', requestOptions);
+	let response = await fetch(`${baseUrl}/api/v1/templates`, requestOptions);
 	let responseBody = await response.json();
 	return responseBody;
 }

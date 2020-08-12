@@ -9,18 +9,18 @@ submitBtn.addEventListener('click', getOptionValues);
 function getOptionValues () {
 
     //get values from user options
-    let pandadocApiKey = document.getElementById('pandadocApi').value;
-    console.log(pandadocApiKey);
-    if(pandadocApiKey !== ''){
+    let baseUrl = document.getElementById('baseUrl').value;
+    console.log(baseUrl);
+    if(baseUrl !== ''){
 
         //Set the pandadocapi to chrome storage
         chrome.storage.sync.set({
-            "pandadocApiKey": pandadocApiKey,
+            "baseUrl": baseUrl,
         });
         window.close();
     }
     else 
-    if(pandadocApiKey == ''){
-        alert("Enter API KEY");
+    if(baseUrl == ''){
+        alert("Enter Base Url");
     }
 }

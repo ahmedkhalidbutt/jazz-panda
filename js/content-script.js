@@ -1,11 +1,12 @@
 let host = document.location.host;
 let modal, refreshedInterval, templateSelect;
-let pandaDocApi = '';
+let baseUrl = '';
 
 
 init();
 
 function init() {
+	console.log(host);
 	if (host === 'app.jazz.co') {
 		refreshedInterval = window.setInterval(checkUrl, 1000);
 	}
@@ -27,10 +28,10 @@ function checkUrl() {
  * Fetch API Key from chrome storage
  */
 function fetchApiKey() {
-	chrome.storage.sync.get([ 'pandadocApiKey' ], function(result) {
+	chrome.storage.sync.get([ 'baseUrl' ], function(result) {
 		console.log(result);
-		if (result.pandadocApiKey) {
-			pandaDocApi = result.pandadocApiKey;
+		if (result.baseUrl) {
+			baseUrl = result.baseUrl;
 			stopInterval();
 		} else {
 			alert('Set API Key');
@@ -82,7 +83,7 @@ function handleClick() {
 }
 
 /**
- * adds modal to page and call a function to fetch templates from pandadoc
+ * adds modal to page and call a function to fetch templates from api
  */
 
 function injectModal() {
@@ -101,7 +102,7 @@ function injectModal() {
 	//bind events to modal
 	bindModalEvent();
 
-	// fetch the templates from pandadoc
+	// fetch the templates from api
 	fetchTemplates();
 }
 
@@ -120,17 +121,17 @@ function closeModal() {
 }
 
 /**
- * fetches templates from pandadoc and call a function to populate the received templates
+ * fetches templates from api and call a function to populate the received templates
  */
 
 function fetchTemplates() {
-	chrome.runtime.sendMessage({ pandaDocApi, type: 'fetchTemplates' }, function(response) {
+	chrome.runtime.sendMessage({ baseUrl, type: 'fetchTemplates' }, function(response) {
 		populateTemplates(response.templates);
 	});
 }
 
 /**
- * populates the templates select element with template options fetched from pandadoc
+ * populates the templates select element with template options fetched from api
  * @param {array} templates 
  */
 
