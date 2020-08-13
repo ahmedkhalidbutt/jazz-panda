@@ -12,7 +12,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 		case 'fetchTemplates': {
 			fetchTemplates(baseUrl).then((response) =>
 				sendResponse({
-					templates: response.results
+					templates: response
 				})
 			);
 			return true;
