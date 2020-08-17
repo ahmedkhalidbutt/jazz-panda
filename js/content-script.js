@@ -2,7 +2,6 @@ let host = document.location.host;
 let modal, refreshedInterval, templateSelect;
 let baseUrl = '';
 
-
 init();
 
 function init() {
@@ -34,7 +33,7 @@ function fetchApiKey() {
 			baseUrl = result.baseUrl;
 			stopInterval();
 		} else {
-			alert('Set API Key');
+			alert('Set API URL');
 		}
 	});
 }
@@ -92,10 +91,13 @@ function injectModal() {
 	modalDiv.id = 'modal-div';
 	modalDiv.innerHTML = `
     <div class="modal-content">
-        <button id='modal-close'>x</button>
+		<button id='modal-close'>x</button></br>
+		<label for='documentName'>Name</label>
+		<input placeholder="Enter Document Name" id='documentName' required/>
         <select id="templateSelect" class="templates">
             <option selected disabled hidden value="0">Select Template</option>
-         </select>
+		 </select>
+		 <button id ='submitDoc'>Submit</button>
     </div>`;
 	document.body.appendChild(modalDiv);
 
@@ -113,6 +115,8 @@ function injectModal() {
 function bindModalEvent() {
 	let modalClose = document.getElementById('modal-close');
 	modalClose.addEventListener('click', closeModal);
+	let submitDoc = document.getElementById('submitDoc');
+	submitDoc.addEventListener('click', handleDocSubmit);
 }
 
 function closeModal() {
@@ -126,7 +130,8 @@ function closeModal() {
 
 function fetchTemplates() {
 	chrome.runtime.sendMessage({ baseUrl, type: 'fetchTemplates' }, function(response) {
-		populateTemplates(response.templates);
+		console.log(response);
+		populateTemplates(response.templates.data);
 	});
 }
 
@@ -137,9 +142,6 @@ function fetchTemplates() {
 
 function populateTemplates(templates) {
 	templateSelect = document.getElementById('templateSelect');
-	templateSelect.addEventListener('change', function() {
-		handleChange(this);
-	});
 
 	let templatesArr = templates;
 
@@ -154,19 +156,6 @@ function populateTemplates(templates) {
 }
 
 /**
- * handle template select change
- * @param {dom element} selectBox | template select dom element 
- */
-
-function handleChange(selectBox) {
-	let selectedValue = selectBox.value;
-	let candidateData = fetchCandidateDetails();
-	candidateData.documentId = selectedValue;
-	let requestObj = candidateData;
-	console.log(candidateData);
-}
-
-/**
  * fetches the candidate details from the page
  */
 
@@ -178,4 +167,18 @@ function fetchCandidateDetails() {
 		email,
 		prospectEmail
 	};
+}
+
+function handleDocSubmit() {
+	let selectedTemplate = document.getElementById('templateSelect').value;
+	let documentName = document.getElementById('documentName').value;
+	let candidateDetails = fetchCandidateDetails();
+	if (documentName === '' || selectedTemplate == '0') {
+		alert('Enter Valid Inputs');
+	} else {
+
+		chrome.runtime.sendMessage({baseUrl, selectedTemplate,documentName,candidateDetails, type: 'postTemplate' }, function(response) {
+			console.log(response);
+		});
+}
 }
