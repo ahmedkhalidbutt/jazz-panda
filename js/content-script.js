@@ -30,7 +30,7 @@ function fetchApiKey() {
 	chrome.storage.sync.get([ 'baseUrl' ], function(result) {
 		console.log(result);
 		if (result.baseUrl) {
-			baseUrl = result.baseUrl;
+			baseUrl = result.baseUrl.replace(/\/$/, "");
 			stopInterval();
 		} else {
 			alert('Set API URL');
