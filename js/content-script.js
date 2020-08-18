@@ -7,7 +7,7 @@ init();
 function init() {
 	console.log(host);
 	if (host === 'app.jazz.co') {
-		refreshedInterval = window.setInterval(checkUrl, 1000);
+		refreshedInterval = window.setInterval(checkUrl, 3000);
 	}
 }
 
@@ -44,7 +44,7 @@ function fetchApiKey() {
 
 function stopInterval() {
 	clearInterval(refreshedInterval);
-	window.setTimeout(addButton, 3000);
+	window.setTimeout(addButton, 8000);
 }
 
 /**
