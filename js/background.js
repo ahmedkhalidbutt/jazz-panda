@@ -6,6 +6,8 @@
  * @param {function} | sendResponse - to send response back to the sender
  */
 
+let bearerToken = localStorage.getItem('bearer_token');
+
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 	let { baseUrl, type } = request;
 	switch (type) {
@@ -35,9 +37,13 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
  * @param {string} apiKey 
  */
 async function fetchTemplates(baseUrl) {
+	var myHeaders = new Headers();
+	myHeaders.append('Authorization', `Bearer ${bearerToken}`);
+	myHeaders.append('Accept', 'application/json');
 	var requestOptions = {
 		method: 'GET',
-		redirect: 'follow'
+		redirect: 'follow',
+		headers: myHeaders
 	};
 	let response = await fetch(`${baseUrl}/api/v1/templates`, requestOptions);
 	let responseBody = await response.json();
@@ -47,7 +53,7 @@ async function fetchTemplates(baseUrl) {
 async function postTemplate(baseUrl, selectedTemplate, documentName, candidateDetails) {
 	let { email, prospectEmail } = candidateDetails;
 	var myHeaders = new Headers();
-	myHeaders.append('Authorization', 'API-Key 72bb32e425f5a38949c0378ebe8cf66873cf494a');
+	myHeaders.append('Authorization', `Bearer ${bearerToken}`);
 	myHeaders.append('Accept', 'application/json');
 
 	var formdata = new FormData();
